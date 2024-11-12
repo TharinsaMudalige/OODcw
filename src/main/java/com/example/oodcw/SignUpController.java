@@ -24,7 +24,7 @@ public class SignUpController {
 
     }
 
-    public void OnLoginButtonClick(ActionEvent actionEvent) throws Exception{
+    public void OnLoginButton2Click(ActionEvent actionEvent) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent LoginWindow = loader.load();
 
