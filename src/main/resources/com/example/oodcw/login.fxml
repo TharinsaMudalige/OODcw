@@ -40,5 +40,6 @@
          </font>
       </Label>
       <Button fx:id="createAccountButton2" layoutX="520.0" layoutY="502.0" mnemonicParsing="false" onAction="#OnCreateAccountButtonClick2" prefHeight="26.0" prefWidth="112.0" text="Create account" />
+      <Button layoutX="753.0" layoutY="652.0" mnemonicParsing="false" onAction="#OnBackToMainMenuButtonClick" prefHeight="26.0" prefWidth="146.0" text="Back To Main Menu" />
    </children>
 </AnchorPane>
