@@ -12,9 +12,9 @@ import javafx.scene.Node;
 public class SmartReadController {
 
     @FXML
-    private Button signUpButton;
+    public Button signUpButton;
     @FXML
-    private Button loginButton;
+    public Button loginButton;
 
 
     public void OnLoginButtonClick(ActionEvent actionEvent) throws Exception{
