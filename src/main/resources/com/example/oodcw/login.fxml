@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="720.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.oodcw.LoginController">
    <children>
       <ImageView fitHeight="722.0" fitWidth="959.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
@@ -17,29 +16,29 @@
             <Image url="@image-948x720%20(3).jpg" />
          </image>
       </ImageView>
-      <Label layoutX="448.0" layoutY="127.0" text="Log In" textFill="WHITE">
+      <Label layoutX="448.0" layoutY="133.0" text="Log In" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="295.0" layoutY="214.0" text="Enter Username :" textFill="WHITE">
+      <Label layoutX="293.0" layoutY="252.0" text="Enter Username :" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <TextField layoutX="442.0" layoutY="211.0" prefHeight="26.0" prefWidth="242.0" />
-      <Label layoutX="295.0" layoutY="277.0" text="Enter Password :" textFill="WHITE">
+      <TextField fx:id="logUsernameButton" layoutX="442.0" layoutY="249.0" prefHeight="26.0" prefWidth="242.0" />
+      <Label layoutX="295.0" layoutY="315.0" text="Enter Password :" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <PasswordField layoutX="442.0" layoutY="274.0" prefHeight="26.0" prefWidth="242.0" />
-      <Button layoutX="430.0" layoutY="360.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="90.0" text="Log In" />
-      <Label layoutX="277.0" layoutY="506.0" text="Don't have an account yet?" textFill="WHITE">
+      <PasswordField fx:id="logPasswordText" layoutX="442.0" layoutY="312.0" prefHeight="26.0" prefWidth="242.0" />
+      <Button fx:id="logInButton3" layoutX="430.0" layoutY="403.0" mnemonicParsing="false" onAction="#OnLoginButton3Click" prefHeight="26.0" prefWidth="90.0" text="Log In" />
+      <Label layoutX="314.0" layoutY="505.0" text="Don't have an account yet?" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Button layoutX="502.0" layoutY="502.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="90.0" text="Sign Up" />
+      <Button fx:id="createAccountButton2" layoutX="520.0" layoutY="502.0" mnemonicParsing="false" onAction="#OnCreateAccountButtonClick2" prefHeight="26.0" prefWidth="112.0" text="Create account" />
    </children>
 </AnchorPane>
