@@ -24,7 +24,7 @@
             <Font name="System Italic" size="18.0" />
          </font>
       </Label>
-      <Button layoutX="369.0" layoutY="427.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="84.0" text="Log In" />
-      <Button layoutX="502.0" layoutY="427.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="84.0" text="Sign Up" />
+      <Button fx:id="loginButton" layoutX="369.0" layoutY="427.0" mnemonicParsing="false" onAction="#OnLoginButtonClick" prefHeight="26.0" prefWidth="84.0" text="Log In" />
+      <Button fx:id="signUpButton" layoutX="502.0" layoutY="427.0" mnemonicParsing="false" onAction="#OnSignUpButtonClick" prefHeight="26.0" prefWidth="84.0" text="Sign Up" />
    </children>
 </AnchorPane>
