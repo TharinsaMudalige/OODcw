@@ -45,7 +45,7 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Button fx:id="loginButton2" layoutX="511.0" layoutY="572.0" mnemonicParsing="false" onAction="#OnLoginButtonClick" prefHeight="26.0" prefWidth="97.0" text="Log In" />
+      <Button fx:id="loginButton2" layoutX="511.0" layoutY="572.0" mnemonicParsing="false" onAction="#OnLoginButton2Click" prefHeight="26.0" prefWidth="97.0" text="Log In" />
       <Label layoutX="268.0" layoutY="267.0" text=" Enter Last Name :" textFill="WHITE">
          <font>
             <Font name="System Bold" size="13.0" />
