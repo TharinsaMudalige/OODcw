@@ -1,6 +1,7 @@
 package com.example.oodcw;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -12,13 +13,21 @@ import javafx.stage.Stage;
 
 public class SignUpController {
 
-    public TextField usernameText;
-    public PasswordField passwordText;
-    public PasswordField confirmPasswordText;
-    public Button createAccountButton;
-    public Button loginButton2;
-    public TextField lastnameText;
-    public TextField firstnameText;
+    @FXML
+    private TextField usernameText;
+    @FXML
+    private PasswordField passwordText;
+    @FXML
+    private PasswordField confirmPasswordText;
+    @FXML
+    private Button createAccountButton;
+    @FXML
+    private Button loginButton2;
+    @FXML
+    private TextField lastnameText;
+    @FXML
+    private TextField firstnameText;
+    @FXML
 
     public void OnCreateAccountButtonClick(ActionEvent actionEvent) throws Exception{
 
