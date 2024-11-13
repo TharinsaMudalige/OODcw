@@ -1,43 +1,52 @@
 package com.example.oodcw;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class User {
-    private String userID;  //the username of the user
+    private String userName;  //the username of the user
+    private String firstName;
+    private String lastName;
     private String userPassword;
-    private List<String> likedArticles;  //stores a list of liked articles
 
-    public User(String userID, String userPassword) {
-        this.userID = userID;
+
+    public User(String userPassword, String userName, String firstName, String lastName) {
+        this.userName = userName;
         this.userPassword = userPassword;
-        this.likedArticles = new ArrayList<>();
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     //Getters and Setters
-    public String getUserID() {
-        return userID;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public String getUserPassword(){
         return userPassword;
     }
 
-    public List<String> getLikedArticles() {
-        return likedArticles; //return a list of all the liked articles
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
-    }
-
-    public void addLikedArticles(String article) {
-        likedArticles.add(article);  //Adding a liked article to the list
     }
 
 
