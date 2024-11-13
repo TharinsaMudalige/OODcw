@@ -17,6 +17,8 @@ public class SignUpController {
     public PasswordField confirmPasswordText;
     public Button createAccountButton;
     public Button loginButton2;
+    public TextField lastnameText;
+    public TextField firstnameText;
 
     public void OnCreateAccountButtonClick(ActionEvent actionEvent) throws Exception{
 
