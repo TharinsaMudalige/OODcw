@@ -16,11 +16,12 @@ public class User {
         this.userPassword = userPassword;
     }
 
-    public User(String userPassword, String userName, String firstName, String lastName) {
-        this.userName = userName;
-        this.userPassword = userPassword;
+    public User(String firstName, String lastName, String userName, String userPassword) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userName = userName;
+        this.userPassword = userPassword;
+
     }
 
     //Getters and Setters
