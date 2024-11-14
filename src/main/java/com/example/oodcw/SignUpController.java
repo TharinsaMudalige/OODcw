@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -27,9 +29,38 @@ public class SignUpController {
     private TextField lastnameText;
     @FXML
     private TextField firstnameText;
-    @FXML
 
+    private DatabaseHandler databaseHandler;
+
+    public SignUpController() {
+        databaseHandler = new DatabaseHandler(); //Initializing the database handler
+    }
+
+    @FXML
     public void OnCreateAccountButtonClick(ActionEvent actionEvent) throws Exception{
+        String firstName = firstnameText.getText();
+        String lastName = lastnameText.getText();
+        String username = usernameText.getText();
+        String password = passwordText.getText();
+        String confirmPassword = confirmPasswordText.getText();
+
+        if(firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()){
+            showAlertMessage(AlertType.ERROR, "Error!","Please fill all fields!");
+            return;
+        }
+
+        if(!password.equals(confirmPassword)){
+            showAlertMessage(AlertType.ERROR, "Error!","Passwords don't match!");
+            return;
+        }
+
+        User user = new User(firstName, lastName, username, password);
+
+        if(databaseHandler.addUser(user)){
+            showAlertMessage(AlertType.INFORMATION, "Success!","User successfully added!");
+        } else {
+            showAlertMessage(AlertType.ERROR, "Error!","Registration failed!");
+        }
 
     }
 
@@ -55,5 +86,12 @@ public class SignUpController {
         stage.setScene(scene);
 
         stage.show();
+    }
+
+    public void showAlertMessage(AlertType alertType, String title, String message){
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
