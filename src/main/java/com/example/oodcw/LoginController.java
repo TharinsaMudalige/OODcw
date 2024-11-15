@@ -1,6 +1,7 @@
 package com.example.oodcw;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -11,10 +12,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class LoginController {
-    public TextField logUsernameButton;
-    public Button logInButton3;
-    public Button createAccountButton2;
-    public PasswordField logPasswordText;
+    @FXML
+    private TextField logUsernameText;
+    @FXML
+    private Button logInButton3;
+    @FXML
+    private Button createAccountButton2;
+    @FXML
+    private PasswordField logPasswordText;
 
 
     public void OnLoginButton3Click(ActionEvent actionEvent) throws Exception {
@@ -42,5 +47,18 @@ public class LoginController {
         stage.setScene(scene);
 
         stage.show();
+    }
+
+    public void OnResetPasswordButtonClick(ActionEvent actionEvent) throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("reset-pwd.fxml"));
+        Parent ResetPwd = loader.load();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Reset Password");
+        Scene scene = new Scene(ResetPwd,940,720);
+        stage.setScene(scene);
+
+        stage.show();
+
     }
 }
