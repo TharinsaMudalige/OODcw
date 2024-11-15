@@ -17,6 +17,13 @@ public class SmartRead extends Application {
         stage.show();
     }
 
+    @Override
+    public void stop() {
+        // Close database connection when the application exits
+        DatabaseConnection.getInstance().closeConnection();
+        System.out.println("Application exited and database connection closed.");
+    }
+
     public static void main(String[] args) {
         launch();
     }
