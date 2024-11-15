@@ -1,41 +1,28 @@
 package com.example.oodcw;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class DatabaseHandler {
-    private static final String URL = "jdbc:mysql://localhost:3306/";
-    private static final String DB_NAME = "smartReadDB";
-    private static final String USER = "root";
-    private static final String PASSWORD = "oodcw123";
+
     private Connection connection;
 
     public DatabaseHandler() {
-        try {
-            // Step 1: Connect to MySQL server and create the database if it doesn't exist
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            createDatabaseIfNotExists();
+        this.connection = DatabaseConnection.getInstance().getConnection();
+        initializeDatabase();
 
-            // Step 2: Connect to the specific database
-            connection = DriverManager.getConnection(URL + DB_NAME, USER, PASSWORD);
-            createTableIfNotExists();
-            System.out.println("Connection established");
-
-        } catch (SQLException e) {
-            System.err.println("Connection failed: " + e.getMessage());
-        }
     }
 
-    // Method to create the database if it doesn't exist
-    private void createDatabaseIfNotExists() throws SQLException {
-        String createDBQuery = "CREATE DATABASE IF NOT EXISTS " + DB_NAME;
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(createDBQuery);
-            System.out.println("Database created/checked successfully");
-        }
+    private void initializeDatabase(){
+        createUsersTableIfNotExists();
     }
+
 
     // Method to create the users table if it doesn't exist
-    private void createTableIfNotExists() throws SQLException {
+    private void createUsersTableIfNotExists() {
         String createTableQuery = """
                 CREATE TABLE IF NOT EXISTS users (
                     userId INT AUTO_INCREMENT PRIMARY KEY,
@@ -49,6 +36,8 @@ public class DatabaseHandler {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableQuery);
             System.out.println("Table created/checked successfully");
+        } catch (SQLException e) {
+            System.err.println("Error creating users table" + e.getMessage());
         }
     }
 
@@ -70,15 +59,33 @@ public class DatabaseHandler {
         }
     }
 
-    // Close MySQL connection
-    public void closeDBConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("MySQL connection closed.");
-            } catch (SQLException e) {
-                System.err.println("Error closing MySQL connection: " + e.getMessage());
-            }
+    //Method to not allow usernames that already exists
+    public boolean isUsernameExists(String username) {
+        String selectQuery = "SELECT COUNT(*) FROM users WHERE username = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)){
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1) > 0; //returns true if username exists
+
+        } catch (SQLException e) {
+            System.err.println("Error checking if username exists: " + e.getMessage());
+            return false;
         }
+    }
+
+    //Method to reset the password
+    public boolean updatePassword(String username, String newPassword) {
+        String query = "UPDATE users SET password = ? WHERE username = ?";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, newPassword);
+            preparedStatement.setString(2, username);
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating password: " + e.getMessage());
+        }
+        return false;
     }
 }
