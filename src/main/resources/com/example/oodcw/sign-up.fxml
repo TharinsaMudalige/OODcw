@@ -13,7 +13,7 @@
    <children>
       <ImageView fitHeight="720.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@image-948x720%20(3).jpg" />
+            <Image url="@background.jpg" />
          </image>
       </ImageView>
       <Label layoutX="441.0" layoutY="129.0" text="Sign Up" textFill="WHITE">
