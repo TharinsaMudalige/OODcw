@@ -36,7 +36,6 @@ public class SignUpController {
         databaseHandler = new DatabaseHandler(); //Initializing the database handler
     }
 
-    @FXML
     public void OnCreateAccountButtonClick(ActionEvent actionEvent) throws Exception{
         String firstName = firstnameText.getText();
         String lastName = lastnameText.getText();
@@ -44,13 +43,21 @@ public class SignUpController {
         String password = passwordText.getText();
         String confirmPassword = confirmPasswordText.getText();
 
+        //Check if fields are empty
         if(firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()){
             showAlertMessage(AlertType.ERROR, "Error!","Please fill all fields!");
             return;
         }
 
+        //Check whether confirm password not equals password
         if(!password.equals(confirmPassword)){
             showAlertMessage(AlertType.ERROR, "Error!","Passwords don't match!");
+            return;
+        }
+
+        //Check if the username exists already
+        if(databaseHandler.isUsernameExists(username)){
+            showAlertMessage(AlertType.ERROR, "Error!","Username already exists!");
             return;
         }
 
