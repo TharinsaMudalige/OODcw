@@ -13,7 +13,7 @@
    <children>
       <ImageView fitHeight="722.0" fitWidth="959.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@image-948x720%20(3).jpg" />
+            <Image url="@background.jpg" />
          </image>
       </ImageView>
       <Label layoutX="448.0" layoutY="133.0" text="Log In" textFill="WHITE">
@@ -26,7 +26,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="logUsernameButton" layoutX="442.0" layoutY="249.0" prefHeight="26.0" prefWidth="242.0" />
+      <TextField fx:id="logUsernameText" layoutX="442.0" layoutY="249.0" prefHeight="26.0" prefWidth="242.0" />
       <Label layoutX="295.0" layoutY="315.0" text="Enter Password :" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
@@ -34,12 +34,18 @@
       </Label>
       <PasswordField fx:id="logPasswordText" layoutX="442.0" layoutY="312.0" prefHeight="26.0" prefWidth="242.0" />
       <Button fx:id="logInButton3" layoutX="430.0" layoutY="403.0" mnemonicParsing="false" onAction="#OnLoginButton3Click" prefHeight="26.0" prefWidth="90.0" text="Log In" />
-      <Label layoutX="314.0" layoutY="505.0" text="Don't have an account yet?" textFill="WHITE">
+      <Label layoutX="314.0" layoutY="551.0" text="Don't have an account yet?" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Button fx:id="createAccountButton2" layoutX="520.0" layoutY="502.0" mnemonicParsing="false" onAction="#OnCreateAccountButtonClick2" prefHeight="26.0" prefWidth="112.0" text="Create account" />
+      <Button fx:id="createAccountButton2" layoutX="520.0" layoutY="548.0" mnemonicParsing="false" onAction="#OnCreateAccountButtonClick2" prefHeight="26.0" prefWidth="112.0" text="Create account" />
       <Button layoutX="753.0" layoutY="652.0" mnemonicParsing="false" onAction="#OnBackToMainMenuButtonClick" prefHeight="26.0" prefWidth="146.0" text="Back To Main Menu" />
+      <Label layoutX="314.0" layoutY="488.0" text="Forgot password?" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Button layoutX="464.0" layoutY="484.0" mnemonicParsing="false" onAction="#OnResetPasswordButtonClick" prefHeight="26.0" prefWidth="112.0" text="Reset password" />
    </children>
 </AnchorPane>
