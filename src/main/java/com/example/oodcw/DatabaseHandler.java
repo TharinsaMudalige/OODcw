@@ -88,4 +88,34 @@ public class DatabaseHandler {
         }
         return false;
     }
+
+    //Method to delete a user
+    public boolean deleteUser(String username) {
+        String deleteQuery = "DELETE FROM users WHERE username = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)){
+            preparedStatement.setString(1, username);
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error deleting user: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean isPasswordCorrect(String username, String password) {
+        String pwdCorrectQuery = "SELECT password FROM users WHERE username = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(pwdCorrectQuery)){
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                String storedPwd = resultSet.getString("password");
+                return storedPwd.equals(password);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error checking if password exists: " + e.getMessage());
+        }
+        return false;
+    }
 }
