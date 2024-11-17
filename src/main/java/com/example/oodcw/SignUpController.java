@@ -6,14 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class SignUpController {
+public class SignUpController extends BaseController{
 
     @FXML
     private TextField usernameText;
@@ -64,41 +63,41 @@ public class SignUpController {
         User user = new User(firstName, lastName, username, password);
 
         if(databaseHandler.addUser(user)){
-            showAlertMessage(AlertType.INFORMATION, "Success!","User successfully added!");
+            showAlertMessage(AlertType.INFORMATION, "Success!","Registered successfully!");
+            navigateToArticleView(actionEvent,username);
         } else {
             showAlertMessage(AlertType.ERROR, "Error!","Registration failed!");
         }
 
     }
 
+    public void navigateToArticleView(ActionEvent actionEvent, String username) throws Exception{
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("article-view.fxml"));
+            Parent ArticleViewWindow = loader.load();
+
+            ArticleViewController articleViewController = loader.getController();
+            articleViewController.setUsername(username);
+
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setTitle("Explore Articles");
+            Scene scene = new Scene(ArticleViewWindow,948,720);
+            stage.setScene(scene);
+
+            stage.show();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void OnLoginButton2Click(ActionEvent actionEvent) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-        Parent LoginWindow = loader.load();
-
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("Log In");
-        Scene scene = new Scene(LoginWindow,940,720);
-        stage.setScene(scene);
-
-        stage.show();
+        GoToLoginPage(actionEvent);
     }
 
     public void OnBackToMainMenuButtonClick(ActionEvent actionEvent) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("smartRead-view.fxml"));
-        Parent BackToMenu = loader.load();
-
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("Personalised News Recommendation System");
-        Scene scene = new Scene(BackToMenu,940,720);
-        stage.setScene(scene);
-
-        stage.show();
+        GoToMainMenu(actionEvent);
     }
 
-    public void showAlertMessage(AlertType alertType, String title, String message){
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 }
