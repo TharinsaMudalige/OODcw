@@ -2,18 +2,13 @@ package com.example.oodcw;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
-public class ResetPwdController {
+
+public class ResetPwdController extends BaseController{
     @FXML
     private TextField usernameText2;
     @FXML
@@ -58,21 +53,7 @@ public class ResetPwdController {
     }
 
     public void OnBackToMainMenuButtonClick(ActionEvent actionEvent) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("smartRead-view.fxml"));
-        Parent BackToMenu = loader.load();
-
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("Personalised News Recommendation System");
-        Scene scene = new Scene(BackToMenu,940,720);
-        stage.setScene(scene);
-
-        stage.show();
+        GoToMainMenu(actionEvent);
     }
 
-    public void showAlertMessage(AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(message);
-        alert.showAndWait();
-    }
 }
