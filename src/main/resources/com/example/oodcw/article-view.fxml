@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="948.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.oodcw.ArticleViewController">
+   <children>
+      <ImageView fitHeight="720.0" fitWidth="948.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@background.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="397.0" layoutY="47.0" text="Explore Articles" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <ScrollPane layoutX="21.0" layoutY="117.0" prefHeight="479.0" prefWidth="906.0">
+         <content>
+            <VBox fx:id="articlesContainer" prefHeight="479.0" prefWidth="906.0" spacing="10" style="-fx-background-color: #FFFFFF; -fx-padding: 10;">
+            </VBox>
+         </content>
+      </ScrollPane>
+      <Button layoutX="392.0" layoutY="638.0" mnemonicParsing="false" onAction="#onMoreArticlesButtonClick" prefHeight="26.0" prefWidth="142.0" text="More Articles..." />
+      <Label fx:id="usernameDisplayText" layoutX="69.0" layoutY="25.0" prefHeight="19.0" prefWidth="178.0" textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="41.0" fitWidth="45.0" layoutX="21.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@user.png" />
+         </image>
+      </ImageView>
+      <ChoiceBox fx:id="optionChoiceBox" layoutX="840.0" layoutY="21.0" onAction="#onOptionSelected" prefHeight="26.0" prefWidth="0.0" />
+   </children>
+</AnchorPane>
