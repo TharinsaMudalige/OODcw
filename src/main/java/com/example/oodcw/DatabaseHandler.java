@@ -118,4 +118,24 @@ public class DatabaseHandler {
         }
         return false;
     }
+
+    public User getUserByUsername(String username) {
+        String detailsQuery = "SELECT firstName, lastName, username FROM users WHERE username = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(detailsQuery)) {
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                return new User(
+                        resultSet.getString("firstName"),
+                        resultSet.getString("lastName"),
+                        resultSet.getString("username"),
+                        null
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
