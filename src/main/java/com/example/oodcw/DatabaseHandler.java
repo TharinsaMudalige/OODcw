@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHandler {
 
@@ -18,8 +20,8 @@ public class DatabaseHandler {
 
     private void initializeDatabase(){
         createUsersTableIfNotExists();
+        createArticlesTableIfNotExists();
     }
-
 
     // Method to create the users table if it doesn't exist
     private void createUsersTableIfNotExists() {
@@ -35,9 +37,30 @@ public class DatabaseHandler {
 
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableQuery);
-            System.out.println("Table created/checked successfully");
+            System.out.println("Users table created/checked successfully");
         } catch (SQLException e) {
+            e.printStackTrace();
             System.err.println("Error creating users table" + e.getMessage());
+        }
+    }
+
+    private void createArticlesTableIfNotExists() {
+        String createArticleTable = """
+                CREATE TABLE IF NOT EXISTS articles (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    article_id VARCHAR(255) UNIQUE,
+                    title VARCHAR(255),
+                    content TEXT,
+                    category VARCHAR(50),
+                    source VARCHAR(255)                   
+                )
+                """;
+        try(Statement statement = connection.createStatement()){
+            statement.executeUpdate(createArticleTable);
+            System.out.println(" Article table created/checked successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error creating article table" + e.getMessage());
         }
     }
 
@@ -54,6 +77,7 @@ public class DatabaseHandler {
             System.out.println("User added successfully: " + user.getUserName());
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             System.err.println("Error adding user to the database: " + e.getMessage());
             return false;
         }
@@ -69,6 +93,7 @@ public class DatabaseHandler {
             return resultSet.getInt(1) > 0; //returns true if username exists
 
         } catch (SQLException e) {
+            e.printStackTrace();
             System.err.println("Error checking if username exists: " + e.getMessage());
             return false;
         }
@@ -83,7 +108,9 @@ public class DatabaseHandler {
             preparedStatement.setString(2, username);
             int rowsAffected = preparedStatement.executeUpdate();
             return rowsAffected > 0;
+
         } catch (SQLException e) {
+            e.printStackTrace();
             System.err.println("Error updating password: " + e.getMessage());
         }
         return false;
@@ -98,6 +125,7 @@ public class DatabaseHandler {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
+            e.printStackTrace();
             System.err.println("Error deleting user: " + e.getMessage());
             return false;
         }
@@ -112,8 +140,8 @@ public class DatabaseHandler {
                 String storedPwd = resultSet.getString("password");
                 return storedPwd.equals(password);
             }
-
         } catch (SQLException e) {
+            e.printStackTrace();
             System.err.println("Error checking if password exists: " + e.getMessage());
         }
         return false;
@@ -138,4 +166,88 @@ public class DatabaseHandler {
         }
         return null;
     }
+
+    public boolean addArticle(Article article) {
+        String insertArticleQuery = """
+                INSERT INTO articles (article_id, title, content, category, source)
+                VALUES (?, ?, ?, ?, ?)
+                """;
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(insertArticleQuery)){
+            preparedStatement.setString(1, article.getArticle_id());
+            preparedStatement.setString(2, article.getTitle());
+            preparedStatement.setString(3, article.getContent());
+            preparedStatement.setString(4, article.getCategory());
+            preparedStatement.setString(5, article.getSource());
+
+            preparedStatement.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error adding article to the database: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean isArticleExists(String articleId) {
+        String query = "SELECT COUNT(*) FROM articles WHERE article_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, articleId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0; // Returns true if the article exists
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error checking if article exists: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public List<Article> getArticles(int countPerCategory) {
+        List<Article> articles = new ArrayList<>();
+        String getQuery = """
+                SELECT article_id, title, content, category, source
+                FROM articles
+                WHERE category = ?
+                ORDER BY RAND()
+                LIMIT ?
+                """;
+        try(PreparedStatement preparedStatement = connection.prepareStatement(getQuery)){
+            for(String category : List.of("Technology", "Sports", "Health", "Crime", "Politics", "Business")){
+                preparedStatement.setString(1, category);
+                preparedStatement.setInt(2, countPerCategory);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while(resultSet.next()){
+                    String articleID = resultSet.getString("article_id");
+                    String title = resultSet.getString("title");
+                    String content = resultSet.getString("content");
+                    String source = resultSet.getString("source");
+
+                    articles.add(new Article(articleID, title, content, category, source));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error getting articles from the database: " + e.getMessage());
+        }
+        return articles;
+    }
+
+    /*public int getArticleCountForCategory(String category) {
+        String query = "SELECT COUNT(*) FROM articles WHERE category = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setString(1, category);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking article count for category: " + e.getMessage());
+        }
+        return 0;
+    }*/
+
 }
