@@ -7,51 +7,65 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="720.0" prefWidth="949.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.oodcw.UserProfileController">
+<AnchorPane prefHeight="720.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.oodcw.Controllers.UserProfileController">
    <children>
       <ImageView fitHeight="720.0" fitWidth="949.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@background.jpg" />
          </image>
       </ImageView>
-      <Label layoutX="427.0" layoutY="59.0" text="My Profile " textFill="WHITE">
+      <Label layoutX="77.0" layoutY="127.0" text="My Profile " textFill="WHITE">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="Bauhaus 93" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="363.0" layoutY="298.0" text="Username : " textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="363.0" layoutY="182.0" text="First Name :" textFill="WHITE">
+      <Label layoutX="80.0" layoutY="377.0" text="Your Username : " textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="362.0" layoutY="242.0" text="Last Name : " textFill="WHITE">
+      <Label layoutX="78.0" layoutY="262.0" text="Your First Name :" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="firstNameLabel" layoutX="504.0" layoutY="182.0" prefHeight="20.0" prefWidth="193.0" textFill="WHITE">
+      <Label layoutX="77.0" layoutY="320.0" text="Your Last Name : " textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="lastNameLabel" layoutX="504.0" layoutY="242.0" prefHeight="20.0" prefWidth="193.0" textFill="WHITE">
+      <Label fx:id="firstNameLabel" layoutX="214.0" layoutY="262.0" prefHeight="20.0" prefWidth="193.0" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="usernameLabel" layoutX="504.0" layoutY="298.0" prefHeight="20.0" prefWidth="193.0" textFill="WHITE">
+      <Label fx:id="lastNameLabel" layoutX="214.0" layoutY="320.0" prefHeight="20.0" prefWidth="193.0" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Button layoutX="302.0" layoutY="424.0" mnemonicParsing="false" onAction="#onLogOutButtonClick" prefHeight="26.0" prefWidth="122.0" text="Log Out" />
-      <Button layoutX="521.0" layoutY="424.0" mnemonicParsing="false" onAction="#OnDeleteAccountButtonClick" prefHeight="26.0" prefWidth="122.0" text="Delete Account" />
+      <Label fx:id="usernameLabel" layoutX="214.0" layoutY="377.0" prefHeight="20.0" prefWidth="193.0" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Button layoutX="69.0" layoutY="622.0" mnemonicParsing="false" onAction="#onLogOutButtonClick" prefHeight="26.0" prefWidth="122.0" text="Log Out" />
+      <Button layoutX="69.0" layoutY="658.0" mnemonicParsing="false" onAction="#OnDeleteAccountButtonClick" prefHeight="26.0" prefWidth="122.0" text="Delete Account" />
       <Button layoutX="835.0" layoutY="658.0" mnemonicParsing="false" onAction="#backToFeedButtonClick" prefHeight="26.0" prefWidth="78.0" text="Back" />
+      <ImageView fitHeight="253.0" fitWidth="275.0" layoutX="546.0" layoutY="182.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@user.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="77.0" layoutY="182.0" text="Please find your profile details below" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="845.0" layoutY="14.0" text="SmartRead" textFill="WHITE">
+         <font>
+            <Font name="Berlin Sans FB Demi Bold" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
