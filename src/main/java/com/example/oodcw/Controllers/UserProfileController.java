@@ -1,5 +1,7 @@
-package com.example.oodcw;
+package com.example.oodcw.Controllers;
 
+import com.example.oodcw.DatabaseHandler;
+import com.example.oodcw.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,13 +38,28 @@ public class UserProfileController extends BaseController {
 
     @FXML
     private void onLogOutButtonClick(ActionEvent actionEvent) throws Exception {
-        GoToLoginPage(actionEvent);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Log Out");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to log out? You will have to log back in.");
+
+        alert.showAndWait().ifPresent(response -> {
+            if(response.getButtonData().isDefaultButton()){
+                try {
+                    showAlertMessage(AlertType.INFORMATION, "Logged Out!", "You have been logged out successfully.");
+                    GoToLoginPage(actionEvent);
+                } catch (Exception e) {
+                    showAlertMessage(AlertType.ERROR, "Error", "Something went wrong while logging out.");
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     @FXML
     private void OnDeleteAccountButtonClick(ActionEvent actionEvent) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation");
+        alert.setTitle("Confirm Delete Account");
         alert.setHeaderText(null);
         alert.setContentText("Are you sure you want to delete this account?");
 
@@ -70,7 +87,7 @@ public class UserProfileController extends BaseController {
     @FXML
     private void backToFeedButtonClick(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("article-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/article-view.fxml"));
             Parent articleViewWindow = loader.load();
 
             ArticleViewController controller = loader.getController();
