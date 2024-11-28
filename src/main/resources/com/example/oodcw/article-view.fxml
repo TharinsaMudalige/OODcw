@@ -10,19 +10,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="948.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.oodcw.ArticleViewController">
+<AnchorPane prefHeight="720.0" prefWidth="948.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.oodcw.Controllers.ArticleViewController">
    <children>
       <ImageView fitHeight="720.0" fitWidth="948.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@background.jpg" />
          </image>
       </ImageView>
-      <Label layoutX="392.0" layoutY="74.0" text="&quot;Discover Your World!&quot;" textFill="WHITE">
+      <Label layoutX="395.0" layoutY="84.0" text="&quot;Discover Your World!&quot;" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="15.0" />
          </font>
       </Label>
-      <ScrollPane layoutX="74.0" layoutY="139.0" prefHeight="479.0" prefWidth="807.0">
+      <ScrollPane layoutX="74.0" layoutY="139.0" prefHeight="479.0" prefWidth="807.0" hbarPolicy="ALWAYS">
          <content>
             <VBox fx:id="articlesContainer" prefHeight="479.0" prefWidth="807.0" spacing="10" style="-fx-background-color: #FFFFFF; -fx-padding: 10;">
             </VBox>
@@ -40,9 +40,9 @@
       </ImageView>
       <Button layoutX="403.0" layoutY="653.0" mnemonicParsing="false" onAction="#onMoreArticlesButtonClick" prefHeight="26.0" prefWidth="142.0" text="More Articles..." />
       <ComboBox fx:id="categoryComboBox" layoutX="738.0" layoutY="71.0" onAction="#onCategorySelected" prefHeight="26.0" prefWidth="142.0" promptText="Select a Category" />
-      <Label layoutX="435.0" layoutY="34.0" text="Your Feed" textFill="WHITE">
+      <Label layoutX="425.0" layoutY="41.0" text="Your Feed" textFill="WHITE">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="Bauhaus 93" size="24.0" />
          </font>
       </Label>
    </children>

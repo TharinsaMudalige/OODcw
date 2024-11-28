@@ -1,5 +1,8 @@
-package com.example.oodcw;
+package com.example.oodcw.Controllers;
 
+import com.example.oodcw.Article;
+import com.example.oodcw.DatabaseHandler;
+import com.example.oodcw.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +15,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class SignUpController extends BaseController{
+import java.util.List;
+
+public class SignUpController extends BaseController {
 
     @FXML
     private TextField usernameText;
@@ -73,15 +78,18 @@ public class SignUpController extends BaseController{
 
     public void navigateToArticleView(ActionEvent actionEvent, String username) throws Exception{
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("article-view.fxml"));
-            Parent ArticleViewWindow = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/article-view.fxml"));
+            Parent articleViewWindow = loader.load();
 
             ArticleViewController articleViewController = loader.getController();
             articleViewController.setUsername(username);
 
+            List<Article> randomArticles = databaseHandler.getArticles(7);
+            articleViewController.displayArticles(randomArticles);
+
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Explore Articles");
-            Scene scene = new Scene(ArticleViewWindow,948,720);
+            Scene scene = new Scene(articleViewWindow,948,720);
             stage.setScene(scene);
 
             stage.show();

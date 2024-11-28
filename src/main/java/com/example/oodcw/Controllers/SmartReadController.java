@@ -1,4 +1,4 @@
-package com.example.oodcw;
+package com.example.oodcw.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
-public class SmartReadController {
+public class SmartReadController extends BaseController {
 
     @FXML
     public Button signUpButton;
@@ -18,19 +18,11 @@ public class SmartReadController {
 
 
     public void OnLoginButtonClick(ActionEvent actionEvent) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-        Parent LoginWindow = loader.load();
-
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("Log In");
-        Scene scene = new Scene(LoginWindow,940,720);
-        stage.setScene(scene);
-
-        stage.show();
+        GoToLoginPage(actionEvent);
     }
 
     public void OnSignUpButtonClick(ActionEvent actionEvent) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("sign-up.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/sign-up.fxml"));
         Parent SignUpWindow = loader.load();
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

@@ -1,5 +1,6 @@
-package com.example.oodcw;
+package com.example.oodcw.Controllers;
 
+import com.example.oodcw.DatabaseHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
@@ -8,7 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 
-public class ResetPwdController extends BaseController{
+public class ResetPwdController extends BaseController {
     @FXML
     private TextField usernameText2;
     @FXML

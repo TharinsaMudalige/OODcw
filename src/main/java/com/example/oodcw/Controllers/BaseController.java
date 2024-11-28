@@ -1,4 +1,4 @@
-package com.example.oodcw;
+package com.example.oodcw.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 public class BaseController {
 
     protected void GoToMainMenu(ActionEvent actionEvent) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("smartRead-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/smartRead-view.fxml"));
         Parent mainMenu = loader.load();
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -24,7 +24,7 @@ public class BaseController {
     }
 
     protected void GoToLoginPage(ActionEvent actionEvent) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/login.fxml"));
         Parent LoginWindow = loader.load();
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

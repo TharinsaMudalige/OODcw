@@ -1,5 +1,6 @@
-package com.example.oodcw;
+package com.example.oodcw.Controllers;
 
+import com.example.oodcw.DatabaseHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -52,7 +53,7 @@ public class LoginController extends BaseController {
     }
 
     public void OnCreateAccountButtonClick2(ActionEvent actionEvent) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("sign-up.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/sign-up.fxml"));
         Parent SignUpWindow = loader.load();
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -65,7 +66,7 @@ public class LoginController extends BaseController {
 
     public void navigateToArticleDisplay(ActionEvent actionEvent, String username){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("article-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/article-view.fxml"));
             Parent ArticleViewWindow = loader.load();
 
             ArticleViewController articleViewController = loader.getController();
@@ -88,7 +89,7 @@ public class LoginController extends BaseController {
     }
 
     public void OnResetPasswordButtonClick(ActionEvent actionEvent) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("reset-pwd.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/reset-pwd.fxml"));
         Parent ResetPwd = loader.load();
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
