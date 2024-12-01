@@ -14,7 +14,7 @@ public class ArticleCategorize {
             return "Health";
 
         }else if(containsAnyKeyword(combinedText, "sports", "match", "tournament", "league",
-                "player", "athlete", "football", "cricket", "basketball", "tennis")){
+                "player", "athlete", "football", "cricket", "basketball", "tennis", "swimming", "badminton")){
             return "Sports";
 
         }else if(containsAnyKeyword(combinedText, "crime", "criminal", "felony", "theft", "robbery",

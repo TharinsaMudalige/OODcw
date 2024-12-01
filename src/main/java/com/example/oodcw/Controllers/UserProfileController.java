@@ -1,5 +1,6 @@
 package com.example.oodcw.Controllers;
 
+import com.example.oodcw.Article;
 import com.example.oodcw.DatabaseHandler;
 import com.example.oodcw.User;
 import javafx.event.ActionEvent;
@@ -13,6 +14,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserProfileController extends BaseController {
     @FXML
     private Label firstNameLabel;
@@ -22,6 +26,7 @@ public class UserProfileController extends BaseController {
     private Label usernameLabel;
 
     private String currentUsername;
+    private List<Article> previousArticles = new ArrayList<>();
 
     public void setUserDetails(String username){
         this.currentUsername = username;
@@ -34,6 +39,10 @@ public class UserProfileController extends BaseController {
             lastNameLabel.setText(user.getLastName());
             usernameLabel.setText(user.getUserName());
         }
+    }
+
+    public void setPreviousArticles(List<Article> articles){
+        this.previousArticles = articles;
     }
 
     @FXML
@@ -92,6 +101,7 @@ public class UserProfileController extends BaseController {
 
             ArticleViewController controller = loader.getController();
             controller.setUsername(currentUsername);
+            controller.displayArticles(previousArticles);
 
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Explore Articles");

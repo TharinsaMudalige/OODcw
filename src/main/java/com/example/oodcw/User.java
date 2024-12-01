@@ -1,6 +1,9 @@
 package com.example.oodcw;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private int userID;
     private final String firstName;
@@ -8,12 +11,15 @@ public class User {
     private final String userName;  //the username of the user
     private String userPassword;
 
+    private List<ArticleInteractions> articleInteractions; //User has a list of interacted articles - composition
+
     public User(int userID, String firstName, String lastName, String userName, String userPassword) {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.userPassword = userPassword;
+        this.articleInteractions = new ArrayList<>();
     }
 
     public User(String firstName, String lastName, String userName, String userPassword) {
@@ -21,7 +27,7 @@ public class User {
         this.lastName = lastName;
         this.userName = userName;
         this.userPassword = userPassword;
-
+        this.articleInteractions = new ArrayList<>();
     }
 
     //Getters and Setters
@@ -48,4 +54,16 @@ public class User {
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }
+
+    public List<ArticleInteractions> getArticleInteractions() {
+        return articleInteractions;
+    }
+
+    public void addArticleInteractions(ArticleInteractions article) {
+        if(!articleInteractions.contains(article)){
+            articleInteractions.add(article);
+        }
+    }
+
+
 }

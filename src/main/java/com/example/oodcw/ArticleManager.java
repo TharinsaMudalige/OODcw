@@ -39,6 +39,4 @@ public class ArticleManager {
 
         System.out.println("Total articles stored during this run for category '" + query + "': " + runSpecificCount);
     }
-
-
 }

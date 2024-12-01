@@ -21,6 +21,7 @@ public class DatabaseHandler {
     private void initializeDatabase(){
         createUsersTableIfNotExists();
         createArticlesTableIfNotExists();
+        createArticleInteractionsTableIfNotExists();
     }
 
     // Method to create the users table if it doesn't exist
@@ -61,6 +62,29 @@ public class DatabaseHandler {
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error creating article table" + e.getMessage());
+        }
+    }
+
+    private void createArticleInteractionsTableIfNotExists() {
+        String createQuery = """
+                CREATE TABLE IF NOT EXISTS article_interactions (   
+                article_id INT,
+                user_id INT,                
+                liked BOOLEAN DEFAULT FALSE,
+                view_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (article_id, user_id),
+                FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users(userId) ON DELETE CASCADE
+                )
+                """;
+
+        try (Statement statement = connection.createStatement()){
+            statement.executeUpdate(createQuery);
+            System.out.println("Article interaction table created/checked successfully");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error creating article interaction table" + e.getMessage());
         }
     }
 
@@ -236,18 +260,101 @@ public class DatabaseHandler {
         return articles;
     }
 
-    /*public int getArticleCountForCategory(String category) {
-        String query = "SELECT COUNT(*) FROM articles WHERE category = ?";
+    public List<Article> getArticlesByCategory(String category, int limit) {
+        List<Article> articles = new ArrayList<>();
+        String query = """
+                SELECT article_id, title, content, category, source
+                FROM articles
+                WHERE category = ?
+                ORDER BY RAND()
+                LIMIT ?
+                """;
+
         try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, category);
+            preparedStatement.setInt(2, limit);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                String articleID = resultSet.getString("article_id");
+                String title = resultSet.getString("title");
+                String content = resultSet.getString("content");
+                String selectCategory = resultSet.getString("category");
+                String source = resultSet.getString("source");
+
+                articles.add(new Article(articleID, title, content, selectCategory, source));
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+            System.err.println("Error getting articles from the database: " + e.getMessage());
+        }
+        return articles;
+    }
+
+    public int getUserIDByUsername(String username){
+        String query = "SELECT userId FROM users WHERE username = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
-                return resultSet.getInt(1);
+                return resultSet.getInt("userId");
             }
         } catch (SQLException e) {
-            System.err.println("Error checking article count for category: " + e.getMessage());
+            e.printStackTrace();
+            System.err.println("Error getting the user id: " + e.getMessage());
         }
-        return 0;
-    }*/
+        return -1; //Return -1 if user does not exist
+    }
 
+    public int getArticleIDByUrl(String url){
+        String query = "SELECT id FROM articles WHERE article_id = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setString(1, url);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error getting the article id: " + e.getMessage());
+        }
+        return -1; //Return -1 if article does not exist
+    }
+
+    public boolean addOrUpdateInteractions(int userId, int articleId, boolean liked){
+        String query = "SELECT liked FROM article_interactions WHERE user_id = ? AND article_id = ?";
+        try(PreparedStatement checkStatement = connection.prepareStatement(query)){
+            checkStatement.setInt(1, userId);
+            checkStatement.setInt(2, articleId);
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            if(resultSet.next()){
+                //Update the liked column if the interaction exists already
+                String updateQuery = "UPDATE article_interactions SET liked = ? WHERE user_id = ? AND article_id = ?";
+                try(PreparedStatement updateStatement = connection.prepareStatement(updateQuery)){
+                    updateStatement.setBoolean(1, liked);
+                    updateStatement.setInt(2, userId);
+                    updateStatement.setInt(3, articleId);
+                    updateStatement.executeUpdate();
+                    System.out.println("Updated for userID: " + userId + " and articleID: " + articleId);
+                    return true;
+                }
+            } else {
+                //Insert a new record if interaction doesn't exist
+                String insertQuery = "INSERT INTO article_interactions (user_id, article_id, liked) VALUES (?, ?, ?)";
+                try(PreparedStatement insertStatement = connection.prepareStatement(insertQuery)){
+                    insertStatement.setInt(1, userId);
+                    insertStatement.setInt(2, articleId);
+                    insertStatement.setBoolean(3, liked);
+                    insertStatement.executeUpdate();
+                    System.out.println("Inserted for userID: " + userId + " and articleID: " + articleId);
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error inserting or updating interactions in the database: " + e.getMessage());
+        }
+        return false;
+    }
 }
