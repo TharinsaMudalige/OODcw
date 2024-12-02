@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="720.0" prefWidth="949.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.oodcw.Controllers.AdminViewArticleController">
+   <children>
+      <ImageView fitHeight="726.0" fitWidth="958.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@background.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="422.0" layoutY="55.0" text="View Articles" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <TableView fx:id="articleTable" layoutX="32.0" layoutY="165.0" prefHeight="518.0" prefWidth="896.0">
+        <columns>
+          <TableColumn prefWidth="55.19998550415039" text="ID" />
+          <TableColumn prefWidth="172.00001525878906" text="ArticleURL" />
+            <TableColumn prefWidth="199.20001220703125" text="Title" />
+            <TableColumn prefWidth="102.4000244140625" text="Category" />
+            <TableColumn prefWidth="246.4000244140625" text="Content" />
+            <TableColumn prefWidth="122.39990234375" text="Source" />
+        </columns>
+      </TableView>
+      <Label layoutX="356.0" layoutY="93.0" text="All the existing articles in the system" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="22.0" layoutY="21.0" text="SmartRead" textFill="WHITE">
+         <font>
+            <Font name="Bauhaus 93" size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
