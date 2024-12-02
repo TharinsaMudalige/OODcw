@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -356,5 +357,66 @@ public class DatabaseHandler {
             System.err.println("Error inserting or updating interactions in the database: " + e.getMessage());
         }
         return false;
+    }
+
+    public Article getArticleByID(String articleID) {
+        String query = "SELECT * FROM articles WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, articleID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return new Article(
+                        resultSet.getString("article_id"),
+                        resultSet.getString("title"),
+                        resultSet.getString("content"),
+                        resultSet.getString("category"),
+                        resultSet.getString("source")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public User loadUserWithInteractions(String username) {
+        User user = null;
+        String userQuery = "SELECT * FROM users WHERE username = ?";
+        String interactionsQuery = "SELECT * FROM article_interactions WHERE user_id = ?";
+
+        try (PreparedStatement userStatement = connection.prepareStatement(userQuery)) {
+            // Fetch the user details
+            userStatement.setString(1, username);
+            ResultSet userResult = userStatement.executeQuery();
+
+            if (userResult.next()) {
+                int userId = userResult.getInt("userId");
+                String firstName = userResult.getString("firstName");
+                String lastName = userResult.getString("lastName");
+                String password = userResult.getString("password");
+
+                user = new User(userId, firstName, lastName, username, password);
+
+                // Fetch the user's interactions
+                try (PreparedStatement interactionStatement = connection.prepareStatement(interactionsQuery)) {
+                    interactionStatement.setInt(1, userId);
+                    ResultSet interactionResult = interactionStatement.executeQuery();
+
+                    while (interactionResult.next()) {
+                        String articleID = interactionResult.getString("article_id");
+                        boolean liked = interactionResult.getBoolean("liked");
+                        LocalDateTime timeViewed = interactionResult.getTimestamp("view_time").toLocalDateTime();
+
+                        ArticleInteractions interaction = new ArticleInteractions(userId, articleID, liked, timeViewed);
+                        user.addArticleInteractions(interaction);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 }
