@@ -2,6 +2,8 @@ package com.example.oodcw.Controllers;
 
 import com.example.oodcw.Article;
 import com.example.oodcw.DatabaseHandler;
+import com.example.oodcw.RecommendationEngine;
+import com.example.oodcw.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.concurrent.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +109,7 @@ public class ArticleViewController extends BaseController {
                                         "-fx-scale-x: 1.0; -fx-scale-y: 1.0;"));
 
 
-            likeButton.setOnAction(event -> onLikeButtonClick(article));
+            likeButton.setOnAction(event -> onLikeButtonClick(article, likeButton));
 
             articleBox.getChildren().addAll(titleLabel, contentLabel, categoryLabel, sourceLabel, linkLabel, likeButton);
             articlesContainer.getChildren().add(articleBox);
@@ -136,6 +139,38 @@ public class ArticleViewController extends BaseController {
 
     @FXML
     private void onMoreArticlesButtonClick(ActionEvent actionEvent) throws Exception {
+        RecommendationEngine recommendationEngine = new RecommendationEngine();
+
+        if (displayedArticles.isEmpty()) {
+            // No interactions yet, return 7 articles from each category (42 articles)
+            List<String> allCategories = List.of("Technology", "Sports", "Health", "Crime", "Politics", "Business");
+
+            // Run the fallback logic asynchronously
+            CompletableFuture.runAsync(() -> {
+                List<Article> fallbackArticles = new ArrayList<>();
+                for (String category : allCategories) {
+                    // Fetch 7 articles from each category
+                    List<Article> categoryArticles = databaseHandler.getArticlesByCategory(category, 7);
+                    fallbackArticles.addAll(categoryArticles);
+                }
+                // Update the UI on the JavaFX Application Thread
+                javafx.application.Platform.runLater(() -> displayArticles(fallbackArticles));
+            });
+        } else {
+            // There are interactions, use recommendation engine asynchronously
+            try {
+                User currentUser = databaseHandler.loadUserWithInteractions(currentUsername);
+
+                CompletableFuture.supplyAsync(() -> recommendationEngine.recommendArticles(currentUser))
+                        .thenAcceptAsync(recommendations -> {
+                            // Update the UI on the JavaFX Application Thread
+                            javafx.application.Platform.runLater(() -> displayArticles(recommendations));
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlertMessage(AlertType.ERROR, "Error", "Unable to fetch articles.");
+            }
+        }
     }
 
     @FXML
@@ -148,9 +183,14 @@ public class ArticleViewController extends BaseController {
     }
 
     @FXML
-    private void onLikeButtonClick(Article article){
+    private void onLikeButtonClick(Article article, Button likeButton){
         int userId = databaseHandler.getUserIDByUsername(currentUsername);
         int articleId = databaseHandler.getArticleIDByUrl(article.getArticle_id());
+
+        // Disable the like button
+        likeButton.setDisable(true);
+        likeButton.setText("Liked");
+
 
         if(userId == -1 || articleId == -1){
             System.out.println("Failed to like");

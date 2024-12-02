@@ -1,17 +1,22 @@
 package com.example.oodcw.Controllers;
 
+import com.example.oodcw.Article;
 import com.example.oodcw.DatabaseHandler;
+import com.example.oodcw.RecommendationEngine;
+import com.example.oodcw.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class LoginController extends BaseController {
     @FXML
@@ -35,21 +40,30 @@ public class LoginController extends BaseController {
         String password = logPasswordText.getText();
 
         if(username.isEmpty() || password.isEmpty()){
-            showAlertMessage(Alert.AlertType.ERROR, "Error!", "Username or Password is empty");
+            showAlertMessage(AlertType.ERROR, "Error!", "Username or Password is empty");
             return;
         }
 
         if(!databaseHandler.isUsernameExists(username)){
-            showAlertMessage(Alert.AlertType.ERROR, "Error!", "Username is invalid");
+            showAlertMessage(AlertType.ERROR, "Error!", "Username is invalid");
             return;
         }
 
         if(!databaseHandler.isPasswordCorrect(username, password)){
-            showAlertMessage(Alert.AlertType.ERROR, "Error!", "Password is incorrect");
+            showAlertMessage(AlertType.ERROR, "Error!", "Password is incorrect");
             return;
         }
 
-        navigateToArticleDisplay(actionEvent,username);
+        CompletableFuture.runAsync(() -> {
+            try {
+                User user = databaseHandler.loadUserWithInteractions(username);
+                javafx.application.Platform.runLater(() -> navigateToArticleDisplay(actionEvent, user));
+            } catch (Exception e) {
+                e.printStackTrace();
+                javafx.application.Platform.runLater(() ->
+                        showAlertMessage(AlertType.ERROR, "Error!", "Failed to log in. Please try again."));
+            }
+        });
     }
 
     public void OnCreateAccountButtonClick2(ActionEvent actionEvent) throws Exception {
@@ -64,24 +78,39 @@ public class LoginController extends BaseController {
         stage.show();
     }
 
-    public void navigateToArticleDisplay(ActionEvent actionEvent, String username){
-        try{
+    public void navigateToArticleDisplay(ActionEvent actionEvent, User user) {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/article-view.fxml"));
-            Parent ArticleViewWindow = loader.load();
+            Parent articleViewWindow = loader.load();
 
-            ArticleViewController articleViewController = loader.getController();
-            articleViewController.setUsername(username);
+            ArticleViewController controller = loader.getController();
+            controller.setUsername(user.getUserName());
+
+            // Run recommendations asynchronously
+            CompletableFuture.supplyAsync(() -> {
+                RecommendationEngine recommendationEngine = new RecommendationEngine();
+                if (user.getArticleInteractions().isEmpty()) {
+                    // If no interactions, display random articles
+                    return recommendationEngine.recommendArticles(user); // Will get 7 per category
+                } else {
+                    // If there are interactions, recommend articles
+                    return recommendationEngine.recommendArticles(user);
+                }
+            }).thenAcceptAsync(recommendedArticles -> {
+                // Update the UI with recommendations
+                controller.setDisplayedArticles(recommendedArticles);
+            }, javafx.application.Platform::runLater);
 
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle("Explore Articles");
-            Scene scene = new Scene(ArticleViewWindow,948,720);
+            stage.setTitle("Your Feed");
+            Scene scene = new Scene(articleViewWindow, 948, 720);
             stage.setScene(scene);
-
             stage.show();
-
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Error navigating from login to article view");
         }
+
     }
 
     public void OnBackToMainMenuButtonClick(ActionEvent actionEvent) throws Exception {
