@@ -54,7 +54,7 @@ public class SignUpController extends BaseController {
 
         //Check if the username exists already
         if(databaseHandler.isUsernameExists(username)){
-            showAlertMessage(AlertType.ERROR, "Error!","Username already exists!");
+            showAlertMessage(AlertType.ERROR, "Error!","Username already exists! Please enter a different username.");
             return;
         }
 
