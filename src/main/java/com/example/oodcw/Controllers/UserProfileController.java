@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserProfileController extends BaseController {
+public class UserProfileController extends BaseController implements ArticleViewNavigator {
     @FXML
     private Label firstNameLabel;
     @FXML
@@ -93,14 +93,14 @@ public class UserProfileController extends BaseController {
 
     }
 
-    @FXML
-    private void backToFeedButtonClick(ActionEvent actionEvent) {
+    @Override
+    public void navigateToArticleView(ActionEvent actionEvent, User user) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/article-view.fxml"));
             Parent articleViewWindow = loader.load();
 
             ArticleViewController controller = loader.getController();
-            controller.setUsername(currentUsername);
+            controller.setUsername(user);
             controller.displayArticles(previousArticles);
 
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -114,5 +114,17 @@ public class UserProfileController extends BaseController {
 
     public void redirectToMenu(ActionEvent actionEvent) throws Exception {
         GoToMainMenu(actionEvent);
+    }
+
+    public void OnBackToFeedButtonClick(ActionEvent actionEvent) throws Exception{
+        try {
+            DatabaseHandler databaseHandler = new DatabaseHandler();
+            User user = databaseHandler.loadUserWithInteractions(currentUsername); // Load user with interactions
+            navigateToArticleView(actionEvent, user); // Pass user object to navigateToArticleView
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlertMessage(AlertType.ERROR, "Error", "Failed to navigate back to your feed.");
+        }
+
     }
 }

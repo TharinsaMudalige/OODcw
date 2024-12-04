@@ -1,21 +1,14 @@
 package com.example.oodcw.Controllers;
 
-import com.example.oodcw.Article;
+
 import com.example.oodcw.DatabaseHandler;
 import com.example.oodcw.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-
-import java.util.List;
 
 public class SignUpController extends BaseController {
 
@@ -69,34 +62,11 @@ public class SignUpController extends BaseController {
 
         if(databaseHandler.addUser(user)){
             showAlertMessage(AlertType.INFORMATION, "Success!","Registered successfully!");
-            navigateToArticleView(actionEvent,username);
+            GoToLoginPage(actionEvent);
         } else {
             showAlertMessage(AlertType.ERROR, "Error!","Registration failed!");
         }
 
-    }
-
-    public void navigateToArticleView(ActionEvent actionEvent, String username) throws Exception{
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/article-view.fxml"));
-            Parent articleViewWindow = loader.load();
-
-            ArticleViewController articleViewController = loader.getController();
-            articleViewController.setUsername(username);
-
-            List<Article> randomArticles = databaseHandler.getArticles(7);
-            articleViewController.displayArticles(randomArticles);
-
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle("Explore Articles");
-            Scene scene = new Scene(articleViewWindow,948,720);
-            stage.setScene(scene);
-
-            stage.show();
-
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void OnLoginButton2Click(ActionEvent actionEvent) throws Exception{

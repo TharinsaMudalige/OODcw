@@ -49,10 +49,9 @@ public class ArticleViewController extends BaseController {
         categoryComboBox.getItems().addAll("Technology", "Sports", "Health", "Crime", "Politics", "Business");
     }
 
-    public void setUsername(String username){
-        this.currentUsername = username;
-        usernameDisplayText.setText(username);
-
+    public void setUsername(User user) {
+        this.currentUsername = user.getUserName(); // Store the username in currentUsername
+        usernameDisplayText.setText(user.getUserName()); // Update the UI label
     }
 
     public void displayArticles(List<Article> articles){

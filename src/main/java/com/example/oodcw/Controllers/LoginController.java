@@ -1,6 +1,5 @@
 package com.example.oodcw.Controllers;
 
-import com.example.oodcw.Article;
 import com.example.oodcw.DatabaseHandler;
 import com.example.oodcw.RecommendationEngine;
 import com.example.oodcw.User;
@@ -15,10 +14,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import java.util.List;
+
 import java.util.concurrent.*;
 
-public class LoginController extends BaseController {
+public class LoginController extends BaseController implements ArticleViewNavigator{
     @FXML
     private TextField logUsernameText;
     @FXML
@@ -36,8 +35,8 @@ public class LoginController extends BaseController {
 
 
     public void OnLoginButton3Click(ActionEvent actionEvent){
-        String username = logUsernameText.getText();
-        String password = logPasswordText.getText();
+        String username = logUsernameText.getText().trim();
+        String password = logPasswordText.getText().trim();
 
         if(username.isEmpty() || password.isEmpty()){
             showAlertMessage(AlertType.ERROR, "Error!", "Username or Password is empty");
@@ -57,7 +56,7 @@ public class LoginController extends BaseController {
         CompletableFuture.runAsync(() -> {
             try {
                 User user = databaseHandler.loadUserWithInteractions(username);
-                javafx.application.Platform.runLater(() -> navigateToArticleDisplay(actionEvent, user));
+                javafx.application.Platform.runLater(() -> navigateToArticleView(actionEvent, user));
             } catch (Exception e) {
                 e.printStackTrace();
                 javafx.application.Platform.runLater(() ->
@@ -78,13 +77,14 @@ public class LoginController extends BaseController {
         stage.show();
     }
 
-    public void navigateToArticleDisplay(ActionEvent actionEvent, User user) {
+    @Override
+    public void navigateToArticleView(ActionEvent actionEvent, User user) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/article-view.fxml"));
             Parent articleViewWindow = loader.load();
 
             ArticleViewController controller = loader.getController();
-            controller.setUsername(user.getUserName());
+            controller.setUsername(user);
 
             // Run recommendations asynchronously
             CompletableFuture.supplyAsync(() -> {

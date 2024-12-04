@@ -32,4 +32,17 @@ public class SmartReadController extends BaseController {
 
         stage.show();
     }
+
+    public void OnAdminButtonClick(ActionEvent actionEvent) throws Exception{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/adminLogin.fxml"));
+        Parent AdminLogInWindow = loader.load();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Admin Login");
+        Scene scene = new Scene(AdminLogInWindow,940,720);
+        stage.setScene(scene);
+
+        stage.show();
+
+    }
 }
