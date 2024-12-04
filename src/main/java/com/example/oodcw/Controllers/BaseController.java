@@ -1,5 +1,6 @@
 package com.example.oodcw.Controllers;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -35,6 +36,18 @@ public class BaseController {
         stage.show();
     }
 
+    protected void GoToAdminMenu(ActionEvent actionEvent) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/adminMenu.fxml"));
+        Parent adminMenuWindow = loader.load();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Admin Menu");
+        Scene scene = new Scene(adminMenuWindow,940,720);
+        stage.setScene(scene);
+
+        stage.show();
+    }
+
     protected void showAlertMessage(AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -42,4 +55,8 @@ public class BaseController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+
+
+
 }
