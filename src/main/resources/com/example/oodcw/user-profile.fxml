@@ -51,7 +51,7 @@
       </Label>
       <Button layoutX="69.0" layoutY="622.0" mnemonicParsing="false" onAction="#onLogOutButtonClick" prefHeight="26.0" prefWidth="122.0" text="Log Out" />
       <Button layoutX="69.0" layoutY="658.0" mnemonicParsing="false" onAction="#OnDeleteAccountButtonClick" prefHeight="26.0" prefWidth="122.0" text="Delete Account" />
-      <Button layoutX="835.0" layoutY="658.0" mnemonicParsing="false" onAction="#backToFeedButtonClick" prefHeight="26.0" prefWidth="78.0" text="Back" />
+      <Button layoutX="835.0" layoutY="658.0" mnemonicParsing="false" onAction="#OnBackToFeedButtonClick" prefHeight="26.0" prefWidth="78.0" text="Back" />
       <ImageView fitHeight="253.0" fitWidth="275.0" layoutX="546.0" layoutY="182.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@user.png" />
