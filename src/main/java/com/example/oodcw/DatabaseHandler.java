@@ -23,6 +23,17 @@ public class DatabaseHandler {
         createUsersTableIfNotExists();
         createArticlesTableIfNotExists();
         createArticleInteractionsTableIfNotExists();
+        createAdminTableIfNotExists();
+
+        Admin defaultAdmin = new Admin("admin_tharinsa","tharinsam@admin");
+        if (!isAdminExists(defaultAdmin.getAdminUserName())) {
+            boolean success = insertAdmin(defaultAdmin);
+            if (success) {
+                System.out.println("Default admin inserted successfully.");
+            } else {
+                System.out.println("Failed to insert the default admin.");
+            }
+        }
     }
 
     // Method to create the users table if it doesn't exist
@@ -86,6 +97,23 @@ public class DatabaseHandler {
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error creating article interaction table" + e.getMessage());
+        }
+    }
+
+    private void createAdminTableIfNotExists() {
+        String createAdminTableQuery = """
+                CREATE TABLE IF NOT EXISTS admin (
+                    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+                    admin_username VARCHAR(100) NOT NULL UNIQUE,
+                    admin_password VARCHAR(100) NOT NULL
+                )
+                """;
+
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(createAdminTableQuery);
+            System.out.println("Admin table created/checked successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error creating Admin table: " + e.getMessage());
         }
     }
 
@@ -419,4 +447,118 @@ public class DatabaseHandler {
 
         return user;
     }
+
+    public boolean insertAdmin(Admin admin) {
+        String insertQuery = """
+            INSERT INTO admin (admin_username, admin_password)
+            VALUES (?, ?)
+            """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, admin.getAdminUserName());
+            preparedStatement.setString(2, admin.getAdminPassword());
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Error inserting admin: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean validateAdminCredentials(String username, String password) {
+        String query = "SELECT COUNT(*) FROM admin WHERE admin_username = ? AND admin_password = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0; // Returns true if a matching admin record exists
+            }
+        } catch (SQLException e) {
+            System.err.println("Error validating admin credentials: " + e.getMessage());
+        }
+
+        return false; // Return false if an error occurs or no matching record is found
+    }
+
+    public boolean isAdminExists(String adminUserName) {
+        String query = "SELECT COUNT(*) FROM admin WHERE admin_username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, adminUserName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking admin existence: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public List<User> getAllUsers() {
+        String query = "SELECT userId, firstName, lastName, username FROM users";
+        List<User> users = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int userId = resultSet.getInt("userId");
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String username = resultSet.getString("username");
+
+                users.add(new User(userId, firstName, lastName, username, null));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching users: " + e.getMessage());
+        }
+
+        return users;
+    }
+
+    public boolean deleteUserById(int userId) {
+        String deleteQuery = "DELETE FROM users WHERE userId = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
+            preparedStatement.setInt(1, userId);
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Error deleting user: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public List<Article> getAllArticles() {
+        List<Article> articles = new ArrayList<>();
+        String query = "SELECT * FROM articles";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String articleId = resultSet.getString("article_id");
+                String title = resultSet.getString("title");
+                String content = resultSet.getString("content");
+                String category = resultSet.getString("category");
+                String source = resultSet.getString("source");
+
+                Article article = new Article(id, articleId, title, content, category, source);
+                articles.add(article);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error fetching articles from the database.");
+        }
+
+        return articles;
+    }
+
+
 }

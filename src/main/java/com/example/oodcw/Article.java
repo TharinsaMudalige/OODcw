@@ -1,18 +1,31 @@
 package com.example.oodcw;
 
 public class Article {
+    private int id;
     private final String article_id; //the link to the article
     private final String title;
     private final String content;
     private String category;
     private final String source;
 
+    public Article(int id, String article_id, String title, String content, String category, String source) {
+        this.id = id;
+        this.article_id = article_id;
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.source = source;
+    }
     public Article(String article_id, String title, String content, String category, String source) {
         this.article_id = article_id;
         this.title = title;
         this.content = content;
         this.category = category;
         this.source = source;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getArticle_id() {
