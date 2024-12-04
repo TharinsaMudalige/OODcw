@@ -4,11 +4,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
 
 <AnchorPane prefHeight="720.0" prefWidth="948.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.oodcw.Controllers.AdminViewUsersController">
    <children>
@@ -32,14 +32,21 @@
             <Font name="Bauhaus 93" size="18.0" />
          </font>
       </Label>
-      <TableView fx:id="usersTable" layoutX="21.0" layoutY="155.0" prefHeight="503.0" prefWidth="906.0">
+      <TableView fx:id="usersTable" layoutX="237.0" layoutY="161.0" prefHeight="426.0" prefWidth="474.0">
         <columns>
-          <TableColumn prefWidth="143.99999618530273" text="UserID" />
-          <TableColumn prefWidth="247.1999969482422" text="First Name" />
-            <TableColumn prefWidth="354.39996337890625" text="Last Name" />
-            <TableColumn prefWidth="163.19989013671875" text="Username" />
+          <TableColumn  prefWidth="97.60000610351562" text="UserID" />
+          <TableColumn  prefWidth="121.5999755859375" text="First Name" />
+            <TableColumn  prefWidth="124.0001220703125" text="Last Name" />
+            <TableColumn  prefWidth="126.4000244140625" text="Username" />
         </columns>
       </TableView>
       <Button layoutX="852.0" layoutY="679.0" mnemonicParsing="false" onAction="#OnBackButtonClick" prefHeight="26.0" prefWidth="74.0" text="Back" />
+      <Button layoutX="237.0" layoutY="644.0" mnemonicParsing="false" onAction="#OnDeleteUserButtonClick" prefHeight="26.0" prefWidth="92.0" text="Delete User" />
+      <Label layoutX="21.0" layoutY="607.0" text="Delete a user by entering the user ID" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="deleteUserIDText" layoutX="21.0" layoutY="644.0" prefHeight="26.0" prefWidth="176.0" promptText="Enter user ID" />
    </children>
 </AnchorPane>
