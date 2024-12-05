@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
+
 
 public class ResetPwdController extends BaseController {
     @FXML
@@ -25,7 +27,7 @@ public class ResetPwdController extends BaseController {
         databaseHandler = new DatabaseHandler();
     }
 
-    public void OnChangePasswordButtonClick(ActionEvent actionEvent) {
+    public void OnChangePasswordButtonClick(ActionEvent actionEvent) throws Exception {
         String username = usernameText2.getText();
         String newPassword = newPasswordText.getText();
         String confirmPassword = confirmPasswordText2.getText();
@@ -47,7 +49,7 @@ public class ResetPwdController extends BaseController {
 
         if(databaseHandler.updatePassword(username, newPassword)){
             showAlertMessage(AlertType.INFORMATION, "Success!", "Password updated successfully!");
-
+            GoToLoginPage(actionEvent);
         } else {
             showAlertMessage(AlertType.ERROR, "Error!", "Password reset failed!");
         }
