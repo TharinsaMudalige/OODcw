@@ -39,13 +39,13 @@
          </font>
       </Label>
       <PasswordField fx:id="confirmPasswordText" layoutX="424.0" layoutY="441.0" prefHeight="26.0" prefWidth="271.0" promptText="Re-enter Password" />
-      <Button fx:id="createAccountButton" layoutX="428.0" layoutY="510.0" mnemonicParsing="false" onAction="#OnCreateAccountButtonClick" prefHeight="26.0" prefWidth="118.0" text="Create account" />
+      <Button layoutX="428.0" layoutY="510.0" mnemonicParsing="false" onAction="#OnCreateAccountButtonClick" prefHeight="26.0" prefWidth="118.0" text="Create account" />
       <Label layoutX="325.0" layoutY="575.0" text="Already have an account?" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Button fx:id="loginButton2" layoutX="511.0" layoutY="572.0" mnemonicParsing="false" onAction="#OnLoginButton2Click" prefHeight="26.0" prefWidth="97.0" text="Log In" />
+      <Button layoutX="511.0" layoutY="572.0" mnemonicParsing="false" onAction="#OnLoginButton2Click" prefHeight="26.0" prefWidth="97.0" text="Log In" />
       <Button layoutX="751.0" layoutY="668.0" mnemonicParsing="false" onAction="#OnBackToMainMenuButtonClick" prefHeight="26.0" prefWidth="162.0" text="Back To Main Menu" />
       <Label layoutX="268.0" layoutY="277.0" text="Enter last name : " textFill="WHITE">
          <font>
