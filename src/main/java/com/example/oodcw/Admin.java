@@ -8,7 +8,10 @@ public class Admin {
     private int adminId;
     private String adminUserName;
     private String adminPassword;
+
+    //List of all the articles
     private List<Article> viewArticles;
+    //List of all the users
     private List<User> viewUsers;
 
 
@@ -16,7 +19,7 @@ public class Admin {
         this.adminId = adminId;
         this.adminUserName = adminUserName;
         this.adminPassword = adminPassword;
-        this.viewArticles = new ArrayList<>();
+        this.viewArticles = new ArrayList<>(); //Initializing the lists
         this.viewUsers = new ArrayList<>();
     }
 
@@ -25,10 +28,7 @@ public class Admin {
         this.adminPassword = adminPassword;
     }
 
-    public int getAdminId() {
-        return adminId;
-    }
-
+    //Getter methods
     public String getAdminUserName() {
         return adminUserName;
     }
@@ -41,6 +41,7 @@ public class Admin {
         return viewArticles;
     }
 
+    //Method to add articles to the list
     public void addViewArticles(List<Article> articles) {
         this.viewArticles.addAll(articles);
     }
@@ -49,6 +50,7 @@ public class Admin {
         return viewUsers;
     }
 
+    //Method to add users to the list
     public void addViewUsers(List<User> articles) {
         this.viewUsers.addAll(articles);
     }

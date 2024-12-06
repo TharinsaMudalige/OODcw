@@ -29,11 +29,11 @@ public class AdminLogInController extends BaseController{
             return;
         }
 
-        // Check credentials using DatabaseHandler
+        // Check credentials
         boolean isAdminValid = databaseHandler.validateAdminCredentials(enteredUsername, enteredPassword);
 
         if (isAdminValid) {
-            // Redirect to Admin Menu
+            // Redirect to Admin Menu page
             GoToAdminMenu(actionEvent);
         } else {
             showAlertMessage(AlertType.ERROR, "Login Failed", "Invalid Username or Password!");

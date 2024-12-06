@@ -1,8 +1,6 @@
 package com.example.oodcw.Controllers;
 
-import com.example.oodcw.DatabaseHandler;
-import com.example.oodcw.RecommendationEngine;
-import com.example.oodcw.User;
+import com.example.oodcw.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,50 +8,48 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+
+import java.util.List;
 import java.util.concurrent.*;
 
 public class LoginController extends BaseController implements ArticleViewNavigator{
     @FXML
     private TextField logUsernameText;
     @FXML
-    private Button logInButton3;
-    @FXML
-    private Button createAccountButton2;
-    @FXML
     private PasswordField logPasswordText;
 
-    private DatabaseHandler databaseHandler;
+    private final DatabaseHandler databaseHandler;
 
     public LoginController() {
         databaseHandler = new DatabaseHandler();
+
     }
 
-
-    public void OnLoginButton3Click(ActionEvent actionEvent){
+    public void OnLoginButton3Click(ActionEvent actionEvent) {
         String username = logUsernameText.getText().trim();
         String password = logPasswordText.getText().trim();
 
-        if(username.isEmpty() || password.isEmpty()){
+        if (username.isEmpty() || password.isEmpty()) {
             showAlertMessage(AlertType.ERROR, "Error!", "Username or Password is empty");
             return;
         }
 
-        if(!databaseHandler.isUsernameExists(username)){
+        if (!databaseHandler.isUsernameExists(username)) {
             showAlertMessage(AlertType.ERROR, "Error!", "Username is invalid");
             return;
         }
 
-        if(!databaseHandler.isPasswordCorrect(username, password)){
+        if (!databaseHandler.isPasswordCorrect(username, password)) {
             showAlertMessage(AlertType.ERROR, "Error!", "Password is incorrect");
             return;
         }
 
-        CompletableFuture.runAsync(() -> {
+        ExecutorService executorService = ServiceManager.getExecutorService();
+        executorService.submit(() -> {
             try {
                 User user = databaseHandler.loadUserWithInteractions(username);
                 javafx.application.Platform.runLater(() -> navigateToArticleView(actionEvent, user));
@@ -71,7 +67,7 @@ public class LoginController extends BaseController implements ArticleViewNaviga
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Sign Up");
-        Scene scene = new Scene(SignUpWindow,940,720);
+        Scene scene = new Scene(SignUpWindow, 940, 720);
         stage.setScene(scene);
 
         stage.show();
@@ -86,20 +82,22 @@ public class LoginController extends BaseController implements ArticleViewNaviga
             ArticleViewController controller = loader.getController();
             controller.setUsername(user);
 
-            // Run recommendations asynchronously
-            CompletableFuture.supplyAsync(() -> {
+            // Submit the recommendation task to the executor service
+            Future<List<Article>> futureRecommendations = ServiceManager.getExecutorService().submit(() -> {
                 RecommendationEngine recommendationEngine = new RecommendationEngine();
-                if (user.getArticleInteractions().isEmpty()) {
-                    // If no interactions, display random articles
-                    return recommendationEngine.recommendArticles(user); // Will get 7 per category
-                } else {
-                    // If there are interactions, recommend articles
-                    return recommendationEngine.recommendArticles(user);
+                return recommendationEngine.recommendArticles(user);
+            });
+
+            ServiceManager.getExecutorService().submit(() -> {
+                try {
+                    List<Article> recommendedArticles = futureRecommendations.get(); // Blocking call
+                    javafx.application.Platform.runLater(() -> controller.setDisplayedArticles(recommendedArticles));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    javafx.application.Platform.runLater(() ->
+                            showAlertMessage(AlertType.ERROR, "Error!", "Failed to load recommendations."));
                 }
-            }).thenAcceptAsync(recommendedArticles -> {
-                // Update the UI with recommendations
-                controller.setDisplayedArticles(recommendedArticles);
-            }, javafx.application.Platform::runLater);
+            });
 
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Your Feed");
@@ -110,23 +108,23 @@ public class LoginController extends BaseController implements ArticleViewNaviga
             e.printStackTrace();
             System.err.println("Error navigating from login to article view");
         }
-
     }
 
     public void OnBackToMainMenuButtonClick(ActionEvent actionEvent) throws Exception {
         GoToMainMenu(actionEvent);
     }
 
-    public void OnResetPasswordButtonClick(ActionEvent actionEvent) throws Exception{
+    public void OnResetPasswordButtonClick(ActionEvent actionEvent) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/oodcw/reset-pwd.fxml"));
         Parent ResetPwd = loader.load();
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Reset Password");
-        Scene scene = new Scene(ResetPwd,940,720);
+        Scene scene = new Scene(ResetPwd, 940, 720);
         stage.setScene(scene);
 
         stage.show();
-
     }
+
+
 }

@@ -25,6 +25,7 @@ public class DatabaseHandler {
         createArticleInteractionsTableIfNotExists();
         createAdminTableIfNotExists();
 
+        //Inserts the admin if admin does not exist in the database
         Admin defaultAdmin = new Admin("admin_tharinsa","tharinsam@admin");
         if (!isAdminExists(defaultAdmin.getAdminUserName())) {
             boolean success = insertAdmin(defaultAdmin);
@@ -57,6 +58,7 @@ public class DatabaseHandler {
         }
     }
 
+    //Method to create the articles table if it doesn't exist
     private void createArticlesTableIfNotExists() {
         String createArticleTable = """
                 CREATE TABLE IF NOT EXISTS articles (
@@ -77,6 +79,7 @@ public class DatabaseHandler {
         }
     }
 
+    //Method to create the article_interactions table if it doesn't exist
     private void createArticleInteractionsTableIfNotExists() {
         String createQuery = """
                 CREATE TABLE IF NOT EXISTS article_interactions (   
@@ -100,6 +103,7 @@ public class DatabaseHandler {
         }
     }
 
+    //Method to create the admin table if it doesn't exist
     private void createAdminTableIfNotExists() {
         String createAdminTableQuery = """
                 CREATE TABLE IF NOT EXISTS admin (
@@ -128,7 +132,7 @@ public class DatabaseHandler {
 
             preparedStatement.executeUpdate();
             System.out.println("User added successfully: " + user.getUserName());
-            return true;
+            return true;  //Returns true if the user is added successfully
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error adding user to the database: " + e.getMessage());
@@ -136,13 +140,13 @@ public class DatabaseHandler {
         }
     }
 
-    //Method to not allow usernames that already exists
+    //Method to check whether a username is already there in the database
     public boolean isUsernameExists(String username) {
         String selectQuery = "SELECT COUNT(*) FROM users WHERE username = ?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)){
             preparedStatement.setString(1, username);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
+            ResultSet resultSet = preparedStatement.executeQuery();  //Executes query and retrieves the result
+            resultSet.next();  //Moves to the first row in the results set
             return resultSet.getInt(1) > 0; //returns true if username exists
 
         } catch (SQLException e) {
@@ -184,6 +188,7 @@ public class DatabaseHandler {
         }
     }
 
+    //Method to check if the password entered by the user is correct
     public boolean isPasswordCorrect(String username, String password) {
         String pwdCorrectQuery = "SELECT password FROM users WHERE username = ?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(pwdCorrectQuery)){
@@ -200,6 +205,7 @@ public class DatabaseHandler {
         return false;
     }
 
+    //Method to get the user details by the username
     public User getUserByUsername(String username) {
         String detailsQuery = "SELECT firstName, lastName, username FROM users WHERE username = ?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(detailsQuery)) {
@@ -220,6 +226,7 @@ public class DatabaseHandler {
         return null;
     }
 
+    //Method to add article to the database
     public boolean addArticle(Article article) {
         String insertArticleQuery = """
                 INSERT INTO articles (article_id, title, content, category, source)
@@ -243,6 +250,7 @@ public class DatabaseHandler {
         }
     }
 
+    //Method to check whether an article exists in the articles table
     public boolean isArticleExists(String articleId) {
         String query = "SELECT COUNT(*) FROM articles WHERE article_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -289,6 +297,7 @@ public class DatabaseHandler {
         return articles;
     }
 
+    //Method to retrieve articles by the category
     public List<Article> getArticlesByCategory(String category, int limit) {
         List<Article> articles = new ArrayList<>();
         String query = """
@@ -320,6 +329,7 @@ public class DatabaseHandler {
         return articles;
     }
 
+    //Method to get the userId by the username
     public int getUserIDByUsername(String username){
         String query = "SELECT userId FROM users WHERE username = ?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
@@ -335,6 +345,7 @@ public class DatabaseHandler {
         return -1; //Return -1 if user does not exist
     }
 
+    //Method to get article ID by the url
     public int getArticleIDByUrl(String url){
         String query = "SELECT id FROM articles WHERE article_id = ?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
@@ -350,6 +361,7 @@ public class DatabaseHandler {
         return -1; //Return -1 if article does not exist
     }
 
+    //Method to add and update user interactions
     public boolean addOrUpdateInteractions(int userId, int articleId, boolean liked){
         String query = "SELECT liked FROM article_interactions WHERE user_id = ? AND article_id = ?";
         try(PreparedStatement checkStatement = connection.prepareStatement(query)){
@@ -358,7 +370,7 @@ public class DatabaseHandler {
             ResultSet resultSet = checkStatement.executeQuery();
 
             if(resultSet.next()){
-                //Update the liked column if the interaction exists already
+                //Update the liked column if the interaction already exists
                 String updateQuery = "UPDATE article_interactions SET liked = ? WHERE user_id = ? AND article_id = ?";
                 try(PreparedStatement updateStatement = connection.prepareStatement(updateQuery)){
                     updateStatement.setBoolean(1, liked);
@@ -369,7 +381,7 @@ public class DatabaseHandler {
                     return true;
                 }
             } else {
-                //Insert a new record if interaction doesn't exist
+                //Insert a new interaction if it doesn't exist already
                 String insertQuery = "INSERT INTO article_interactions (user_id, article_id, liked) VALUES (?, ?, ?)";
                 try(PreparedStatement insertStatement = connection.prepareStatement(insertQuery)){
                     insertStatement.setInt(1, userId);
@@ -387,6 +399,7 @@ public class DatabaseHandler {
         return false;
     }
 
+    //Method to retrieve article details by the ID
     public Article getArticleByID(String articleID) {
         String query = "SELECT * FROM articles WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -414,7 +427,7 @@ public class DatabaseHandler {
         String interactionsQuery = "SELECT * FROM article_interactions WHERE user_id = ?";
 
         try (PreparedStatement userStatement = connection.prepareStatement(userQuery)) {
-            // Fetch the user details
+            //Get the user details
             userStatement.setString(1, username);
             ResultSet userResult = userStatement.executeQuery();
 
@@ -426,7 +439,7 @@ public class DatabaseHandler {
 
                 user = new User(userId, firstName, lastName, username, password);
 
-                // Fetch the user's interactions
+                //Get the user's interactions
                 try (PreparedStatement interactionStatement = connection.prepareStatement(interactionsQuery)) {
                     interactionStatement.setInt(1, userId);
                     ResultSet interactionResult = interactionStatement.executeQuery();
@@ -448,6 +461,7 @@ public class DatabaseHandler {
         return user;
     }
 
+    //Method to insert an admin
     public boolean insertAdmin(Admin admin) {
         String insertQuery = """
             INSERT INTO admin (admin_username, admin_password)
@@ -498,6 +512,7 @@ public class DatabaseHandler {
         return false;
     }
 
+    //Retrieves all the users in the users table
     public List<User> getAllUsers() {
         String query = "SELECT userId, firstName, lastName, username FROM users";
         List<User> users = new ArrayList<>();
@@ -520,6 +535,7 @@ public class DatabaseHandler {
         return users;
     }
 
+    //Method to remove a user by the ID
     public boolean deleteUserById(int userId) {
         String deleteQuery = "DELETE FROM users WHERE userId = ?";
 
@@ -534,6 +550,7 @@ public class DatabaseHandler {
         return false;
     }
 
+    //Retrieves all the articles in the articles table
     public List<Article> getAllArticles() {
         List<Article> articles = new ArrayList<>();
         String query = "SELECT * FROM articles";

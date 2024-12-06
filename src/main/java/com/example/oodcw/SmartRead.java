@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class SmartRead extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(SmartRead.class.getResource("smartRead-view.fxml"));
@@ -22,6 +23,10 @@ public class SmartRead extends Application {
         // Close database connection when the application exits
         DatabaseConnection.getInstance().closeConnection();
         System.out.println("Application exited and database connection closed.");
+
+        // Shut down the executor service when the application exits
+        ServiceManager.shutdownServices();
+        System.out.println("Executor service shut down.");
     }
 
     public static void main(String[] args) {

@@ -18,8 +18,7 @@ public class ResetPwdController extends BaseController {
     private PasswordField newPasswordText;
     @FXML
     private PasswordField confirmPasswordText2;
-    @FXML
-    private Button changePasswordButton;
+
 
     private DatabaseHandler databaseHandler;
 

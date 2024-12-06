@@ -8,10 +8,10 @@ public class User {
     private int userID;
     private final String firstName;
     private final String lastName;
-    private final String userName;  //the username of the user
+    private final String userName;
     private String userPassword;
 
-    private List<ArticleInteractions> articleInteractions; //User has a list of interacted articles - composition
+    private final List<ArticleInteractions> articleInteractions; //User has a list of interacted articles - composition
 
     public User(int userID, String firstName, String lastName, String userName, String userPassword) {
         this.userID = userID;
@@ -31,6 +31,7 @@ public class User {
     }
 
     //Getters and Setters
+
     public int getUserID() {
         return userID;
     }
@@ -51,19 +52,15 @@ public class User {
         return userPassword;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
+    //Get all the interaction for the user
     public List<ArticleInteractions> getArticleInteractions() {
         return articleInteractions;
     }
 
+    //Add interactions to the list
     public void addArticleInteractions(ArticleInteractions article) {
         if(!articleInteractions.contains(article)){
             articleInteractions.add(article);
         }
     }
-
-
 }

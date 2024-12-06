@@ -52,12 +52,12 @@ public class AdminViewArticleController extends BaseController {
         contentColumn.setCellValueFactory(new PropertyValueFactory<>("content"));
         sourceColumn.setCellValueFactory(new PropertyValueFactory<>("source"));
 
-        // Load articles from the database and display them in the TableView
+        //Load articles from the database and display them in the TableView
         loadArticles();
     }
 
     private void loadArticles() {
-        List<Article> articles = databaseHandler.getAllArticles(); // Load existing articles into the admin's viewArticles list
+        List<Article> articles = databaseHandler.getAllArticles(); //Load all the articles into the viewArticles list
         admin.addViewArticles(articles);
         ObservableList<Article> observableArticles = FXCollections.observableArrayList(admin.getViewArticles());
         articleTable.setItems(observableArticles);
@@ -69,7 +69,7 @@ public class AdminViewArticleController extends BaseController {
 
     public void OnAddArticlesButtonClick() {
         try {
-            // Fetch and store articles from API
+            //Fetch and store articles from API
             articleManager.fetchAndStoreArticles("Technology"); // Example category, you can expand to more categories
             articleManager.fetchAndStoreArticles("Health");
             articleManager.fetchAndStoreArticles("Sports");
@@ -78,10 +78,10 @@ public class AdminViewArticleController extends BaseController {
             articleManager.fetchAndStoreArticles("Politics");
 
             admin.getViewArticles().clear();
-            // Load the updated articles into the table
+            //Update the tables
             loadArticles();
 
-            // Show success message
+
             showAlertMessage(AlertType.INFORMATION, "Success", "Articles added successfully!");
         } catch (Exception e) {
             e.printStackTrace();

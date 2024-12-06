@@ -8,6 +8,7 @@ public class Article {
     private String category;
     private final String source;
 
+    //Parameterized constructors
     public Article(int id, String article_id, String title, String content, String category, String source) {
         this.id = id;
         this.article_id = article_id;
@@ -24,6 +25,7 @@ public class Article {
         this.source = source;
     }
 
+    //Getters and setters
     public int getId() {
         return id;
     }
@@ -52,6 +54,7 @@ public class Article {
         return source;
     }
 
+    //Checks whether any of the fields are empty/null
     public boolean isValid() {
         return article_id != null && !article_id.isBlank() &&
                 title != null && !title.isBlank() &&

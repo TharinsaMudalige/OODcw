@@ -5,31 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.concurrent.*;
-
 
 public class RecommendationEngine {
     private final DatabaseHandler databaseHandler;
-    private final ExecutorService executorService;
 
     public RecommendationEngine() {
         this.databaseHandler = new DatabaseHandler();
-        // Create a thread pool for handling multiple requests
-        this.executorService = Executors.newFixedThreadPool(5); // 5 threads for parallelism
-    }
-
-    // Concurrent method to recommend articles
-    public Future<List<Article>> recommendArticlesAsync(User user) {
-        return executorService.submit(() -> recommendArticles(user)); // Submitting the task asynchronously
     }
 
     // Synchronous recommendation logic
     public List<Article> recommendArticles(User user) {
-        // Step 1: Get all user interactions
+        //Get all user interactions
         List<ArticleInteractions> interactions = user.getArticleInteractions();
 
         if (interactions.isEmpty()) {
-            // No interactions yet, fetch 7 articles from each category (42 in total)
+            //Fetch 7 articles from each category (42 in total) if there are no interactions
             List<Article> fallbackArticles = new ArrayList<>();
             List<String> allCategories = List.of("Technology", "Sports", "Health", "Crime", "Politics", "Business");
 
@@ -41,7 +31,7 @@ public class RecommendationEngine {
             return fallbackArticles;
         }
 
-        // Step 2: Categorize liked and viewed articles
+        //Categorize liked and viewed articles
         Map<String, Integer> categoryWeights = new HashMap<>();
         for (ArticleInteractions interaction : interactions) {
             Article article = databaseHandler.getArticleByID(interaction.getArticleID()); // Fetch article from DB
@@ -55,21 +45,21 @@ public class RecommendationEngine {
             }
         }
 
-        // Step 3: Sort categories by their weights (most important categories first)
+        //Sort categories by their weights with the most important categories first
         List<String> sortedCategories = categoryWeights.entrySet()
                 .stream()
                 .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
-        // Step 4: Fetch recommended articles by category
+        //Get recommended articles by category
         List<Article> recommendedArticles = new ArrayList<>();
         for (String category : sortedCategories) {
             List<Article> articles = databaseHandler.getArticlesByCategory(category, 5); // Fetch 5 articles per category
             recommendedArticles.addAll(articles);
         }
 
-        // Step 5: Add diversity (articles from unexplored categories)
+        //Get articles from unexplored categories
         List<String> allCategories = List.of("Technology", "Sports", "Health", "Crime", "Politics", "Business");
         List<String> unexploredCategories = new ArrayList<>(allCategories);
         unexploredCategories.removeAll(sortedCategories);
@@ -79,12 +69,7 @@ public class RecommendationEngine {
             recommendedArticles.addAll(articles);
         }
 
-        // Step 6: Limit total recommendations to 30 articles
+        //Limiting total recommendations to 30 articles
         return recommendedArticles.stream().limit(30).collect(Collectors.toList());
-    }
-
-    // Shutdown the ExecutorService when the application closes
-    public void shutdown() {
-        executorService.shutdown();
     }
 }

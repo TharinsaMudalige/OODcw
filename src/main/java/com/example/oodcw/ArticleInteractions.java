@@ -16,35 +16,13 @@ public class ArticleInteractions {
     }
 
     // Getters and setters
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
 
     public String getArticleID() {
         return articleID;
-    }
-
-    public void setArticleID(String articleID) {
-        this.articleID = articleID;
     }
 
     public boolean isLiked() {
         return liked;
     }
 
-    public void setLiked(boolean liked) {
-        this.liked = liked;
-    }
-
-    public LocalDateTime getTimeViewed() {
-        return timeViewed;
-    }
-
-    public void setTimeViewed(LocalDateTime timeViewed) {
-        this.timeViewed = timeViewed;
-    }
 }

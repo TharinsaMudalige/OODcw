@@ -2,13 +2,15 @@ package com.example.oodcw.Controllers;
 
 
 import com.example.oodcw.DatabaseHandler;
+import com.example.oodcw.ServiceManager;
 import com.example.oodcw.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
+import java.util.concurrent.ExecutorService;
 
 public class SignUpController extends BaseController {
 
@@ -18,10 +20,6 @@ public class SignUpController extends BaseController {
     private PasswordField passwordText;
     @FXML
     private PasswordField confirmPasswordText;
-    @FXML
-    private Button createAccountButton;
-    @FXML
-    private Button loginButton2;
     @FXML
     private TextField lastnameText;
     @FXML
@@ -52,20 +50,37 @@ public class SignUpController extends BaseController {
             return;
         }
 
-        //Check if the username exists already
-        if(databaseHandler.isUsernameExists(username)){
-            showAlertMessage(AlertType.ERROR, "Error!","Username already exists! Please enter a different username.");
-            return;
-        }
+        ExecutorService executorService = ServiceManager.getExecutorService();
+        executorService.submit(() -> {
+            try {
+                //Check if the username exists
+                if (databaseHandler.isUsernameExists(username)) {
+                    javafx.application.Platform.runLater(() ->
+                            showAlertMessage(AlertType.ERROR, "Error!", "Username already exists! Please enter a different username."));
+                    return;
+                }
 
-        User user = new User(firstName, lastName, username, password);
-
-        if(databaseHandler.addUser(user)){
-            showAlertMessage(AlertType.INFORMATION, "Success!","Registered successfully!");
-            GoToLoginPage(actionEvent);
-        } else {
-            showAlertMessage(AlertType.ERROR, "Error!","Registration failed!");
-        }
+                //Create and add the new user
+                User user = new User(firstName, lastName, username, password);
+                if (databaseHandler.addUser(user)) {
+                    javafx.application.Platform.runLater(() -> {
+                        showAlertMessage(AlertType.INFORMATION, "Success!", "Registered successfully!");
+                        try {
+                            GoToLoginPage(actionEvent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } else {
+                    javafx.application.Platform.runLater(() ->
+                            showAlertMessage(AlertType.ERROR, "Error!", "Registration failed!"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                javafx.application.Platform.runLater(() ->
+                        showAlertMessage(AlertType.ERROR, "Error!", "An unexpected error occurred!"));
+            }
+        });
 
     }
 
@@ -76,6 +91,4 @@ public class SignUpController extends BaseController {
     public void OnBackToMainMenuButtonClick(ActionEvent actionEvent) throws Exception {
         GoToMainMenu(actionEvent);
     }
-
-
 }

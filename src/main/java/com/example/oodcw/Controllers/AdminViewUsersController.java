@@ -31,7 +31,7 @@ public class AdminViewUsersController extends BaseController {
 
     @FXML
     public void initialize() {
-        // Configure table columns
+        //Configuring the table columns
         TableColumn<User, Integer> userIdColumn = new TableColumn<>("UserID");
         userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
@@ -44,16 +44,16 @@ public class AdminViewUsersController extends BaseController {
         TableColumn<User, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
 
-        // Add columns to the table
+        //Adding columns to the table
         usersTable.getColumns().setAll(userIdColumn, firstNameColumn, lastNameColumn, usernameColumn);
 
-        // Load users from the database
+        //Load all the users from the database
         loadUsers();
     }
 
     private void loadUsers() {
         List<User> users = databaseHandler.getAllUsers();
-        admin.addViewUsers(users);  // Adds users to admin's list
+        admin.addViewUsers(users);  //Adds users to the list
         ObservableList<User> usersObservableList = FXCollections.observableArrayList(admin.getViewUsers());
         usersTable.setItems(usersObservableList);
     }
